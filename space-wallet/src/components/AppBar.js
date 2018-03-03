@@ -22,7 +22,7 @@ class SpaceAppBar extends Component {
                   <MenuItem>Main</MenuItem>
                   <MenuItem>Analytics</MenuItem>
                   <MenuItem>Contracts</MenuItem>
-                  <MenuItem>Sign-out</MenuItem>
+                  <MenuItem onClick={() => {window.location = "/";}}>Sign-out</MenuItem>
                 </Drawer>
         </div>
         )

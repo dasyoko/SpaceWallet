@@ -14,12 +14,39 @@ class WalletDetails extends Component {
             wallet: Wallet address
         */
     }
+
+    componentDidMount() {
+        var request = require("request");
+
+        var options = { method: 'POST',
+        url: 'http://172.46.2.78:3000/getWalletDetails/',
+        headers: 
+        { 'Content-Type': 'application/json' },
+        body: { jwt:  window.sessionStorage("jwt")},
+        json: true };
+
+        request(options, function (error, response, body) {
+            if(response.statusCode !== 200) {
+                window.sessionStorage.clear();
+                window.location = "/login"
+            }
+            else {
+                this.setState({walletDetails: body, dataLoaded: true});
+            }
+        });
+    }
+
     promptUser() {
         this.setState({prompt: true})
     }
     render() {
-        if(this.state.dataLoaded)
+        if(!this.state.dataLoaded || window.sessionStorage.getItem("jwt") == null) {
+            // If data has not loaded or if we do not have an auth token, load nothing
+            if(window.sessionStorage.getItem("jwt") == null) {
+                window.location = "/"
+            }
             return(<AppBar/>);
+        }
         else {
             return(
             <div>
