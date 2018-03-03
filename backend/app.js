@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const http = require('http');
 const PORT = 3000;
 const fs = require('fs');
@@ -7,14 +6,18 @@ const Datastore = require('nedb');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const app = express();
+app.use(cors());
+app.options('*', cors());
 
-//var privateKey = fs.readFileSync('server.key');
-//var certificate = fs.readFileSync('server.crt');
+var privateKey = fs.readFileSync('server.key');
+var certificate = fs.readFileSync('server.crt');
 
-//var config = {
-  //  key: privateKey,
-    //cert: certificate
-//};
+var config = {
+    key: privateKey,
+    cert: certificate
+};
 
 var users =  new Datastore({ filename: 'db/users.db', autoload: true});
 
@@ -41,7 +44,7 @@ app.get('/api/stuff', function(req, res, next){
     res.json({stuff:'stuff'});
 });
 
-app.post('/register/', function (req, res, next){
+app.post('/register', function (req, res, next){
     // check if requests containes values
     if (!('username' in req.body)) return res.status(400).end('Username is missing');
     if (!('password' in req.body)) return res.status(400).end('Password is missing');
@@ -64,7 +67,7 @@ app.post('/register/', function (req, res, next){
 });
 
 // let non authenticated users sign in
-app.post('/signin/', function (req, res, next) {
+app.post('/signin', function (req, res, next) {
     // check if requests containes values
     if (!('username' in req.body)) return res.status(400).end('Username is missing');
     if (!('password' in req.body)) return res.status(400).end('Password is missing');
@@ -81,7 +84,7 @@ app.post('/signin/', function (req, res, next) {
 });
 
 // let authenticated users sign out
-app.get('/signout/', function (req, res, next) {
+app.get('/signout', function (req, res, next) {
     res.status(200).send({token: null});
 });
 
