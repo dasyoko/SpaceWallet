@@ -48,9 +48,11 @@ app.post('/register', function (req, res, next){
     // check if requests containes values
     if (!('username' in req.body)) return res.status(400).end('Username is missing');
     if (!('password' in req.body)) return res.status(400).end('Password is missing');
+    if (!('type' in req.body)) return res.status(400).end('Type is missing');
     // get username and password
     var username = req.body.username;
     var password = req.body.password;
+    var type = req.body.type;
 
     // check if username doesn't already exist
     users.findOne({_id: username}, function(err, user){
@@ -59,7 +61,7 @@ app.post('/register', function (req, res, next){
         // otherwise create hash and add to database
         var salt = createSalt();
         var hash = createHash(password, salt);
-        users.update({_id: username}, {_id: username, salt:salt, hash:hash}, {upsert: true}, function(err){
+        users.update({_id: username}, {_id: username, salt:salt, hash:hash, type:type}, {upsert: true}, function(err){
             if (err) return res.status(500).end(err);
             return res.json("User " + username + " has successfully registered.");
         });
