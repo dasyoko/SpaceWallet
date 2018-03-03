@@ -7,6 +7,7 @@ const styles = {
     },
   };
 const SpaceAppBar = () => (
-    <AppBar showMenuIconButton={false} title={<span style={styles.title}>SpaceWallet</span>}/>
+    <AppBar href="/" showMenuIconButton={false} title={<span style={styles.title}>SpaceWallet</span>}/>
 );
+
 export default SpaceAppBar;

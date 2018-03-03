@@ -10,7 +10,7 @@ class App extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/' render={() => (
+        <Route exact path='/login' render={() => (
           <div className="loginForm">
             <MuiThemeProvider>
               <LoginComponent />
