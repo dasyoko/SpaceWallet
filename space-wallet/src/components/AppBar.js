@@ -20,7 +20,7 @@ class SpaceAppBar extends Component {
             <AppBar onClick={this.handleToggle} href="/" title={<span style={styles.title}>SpaceWallet</span>}/>
                 <Drawer docked={false} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
                   <MenuItem>Main</MenuItem>
-                  <MenuItem>Analytics</MenuItem>
+                  <MenuItem onClick={() => {window.location = "/analytics";}}>Analytics</MenuItem>
                   <MenuItem>Contracts</MenuItem>
                   <MenuItem onClick={() => {window.location = "/";}}>Sign-out</MenuItem>
                 </Drawer>

@@ -33,7 +33,7 @@ class LoginComponent extends Component {
         }
         else {
           sessionStorage.setItem("jwt", body.token);
-          window.location = '/mainpage'
+          window.location = '/main'
         }
       });
 
@@ -43,10 +43,12 @@ class LoginComponent extends Component {
     <div>
     <SpaceAppBar/>
     <div style={{ margin: '100px' }}>
-      <TextField onChange={this.usernameTextChange.bind(this)} hintText="SSN" /><br/>
-      <TextField onChange={this.passwordTextChange.bind(this)}  hintText="Password" /> <br/>
-      <RaisedButton onClick={this.login.bind(this)} style={{ margin: '10px' }} label="Login" />
-      <RaisedButton href="/register" label="REGISTER" />
+      <center>
+        <TextField onChange={this.usernameTextChange.bind(this)} hintText="SSN" /><br/>
+        <TextField onChange={this.passwordTextChange.bind(this)}  hintText="Password" /> <br/>
+        <RaisedButton onClick={this.login.bind(this)} style={{ margin: '10px' }} label="Login" />
+        <RaisedButton href="/register" label="REGISTER" />
+      </center>
     </div>
   </div>)}
 }

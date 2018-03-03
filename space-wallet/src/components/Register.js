@@ -83,7 +83,7 @@ class RegisterComponent extends Component {
         <Divider/>
       </Paper>
       <RaisedButton onClick={this.register.bind(this)}  className="registerBtn" label="Register"/>
-      <RaisedButton href="/" label="Back"/>
+      <RaisedButton className="secondBtn" href="/" label="Back"/>
     </div>)
   }
 }

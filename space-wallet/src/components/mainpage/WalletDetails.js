@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AppBar from '../AppBar';
 import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 import WalletPrompt from './dialogs/WalletPrompt';
+import '../../App.css';
 
 
 class WalletDetails extends Component {
@@ -22,18 +23,23 @@ class WalletDetails extends Component {
         url: 'http://172.46.2.78:3000/getWalletDetails/',
         headers: 
         { 'Content-Type': 'application/json' },
-        body: { jwt:  window.sessionStorage("jwt")},
+        body: { jwt:  window.sessionStorage.getItem("jwt")},
         json: true };
-
+        var self = this;
         request(options, function (error, response, body) {
-            if(response.statusCode !== 200) {
+            if(response.statusCode === 401) {
                 window.sessionStorage.clear();
-                window.location = "/login"
+                window.location = "/";
             }
-            else {
-                this.setState({walletDetails: body, dataLoaded: true});
+            else if (response.statusCode === 500) {
+                alert("Server down.")
+                window.location = "/";
+            }
+            else if(response.statusCode === 200) {
+                self.setState({walletDetails: body, dataLoaded: true})
             }
         });
+        console.log(this.state.walletDetails)
     }
 
     promptUser() {
@@ -51,13 +57,15 @@ class WalletDetails extends Component {
             return(
             <div>
                 <AppBar/>
+                <center>
                 <h1>Wallet Information</h1>
-                <h2>{this.state.walletDetails.coin}</h2>
+                <h2>{this.state.walletDetails.coin} SC</h2>
                 <div className="financialDetails">
                     <RaisedButton onClick={this.promptUser.bind(this)} label="Send"/>
                     <RaisedButton className="secondBtn" label="Check Transaction History"/>
                 </div>
                 <WalletPrompt open = {this.state.prompt} />
+                </center>
             </div>) 
         }
     }
