@@ -22,13 +22,11 @@ class WalletDetails extends Component {
         var options = { method: 'GET',
         url: 'http://172.46.2.78:3000/getWalletDetails/',
         headers: 
-        { jwt: sessionStorage.getItem("jwt")} }
+        { jwt: sessionStorage.getItem("jwt")}}
         request(options, function (error, response, body) {
-        if (error) throw new Error(error);
-
-        self.setState({walletDetails: body, dataLoaded: true});
+            if (error) throw new Error(error);
+            self.setState({walletDetails: JSON.parse(body), dataLoaded: true});
         });
-        console.log(this.state.walletDetails)
     }
 
     promptUser() {
@@ -43,6 +41,7 @@ class WalletDetails extends Component {
             return(<AppBar/>);
         }
         else {
+            console.log(this.state.walletDetails.coin)
             return(
             <div>
                 <AppBar/>
