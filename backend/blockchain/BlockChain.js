@@ -4,6 +4,21 @@ class Blockchain {
     constructor() {
         this.chain = [this.createStartingBlock()]
     }
+
+    getBalanceOfAddress(addr) {
+        let balance = 0;
+        for (const block in this.chain) {
+            for (const trans in this.chain.transactionData) {
+                if(trans.toAddr === addr) {
+                    balance += trans.amount;
+                }
+                if(trans.fromAddr === addr) {
+                    balance -= trans.amount;
+                }
+            }
+        }
+        return balance;
+    }
     createStartingBlock() {
         return new Block(0, '3/3/2018', "Starting Block", "0")
     }
