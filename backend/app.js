@@ -76,9 +76,13 @@ app.post('/signin/', function (req, res, next) {
         if (err) return res.status(500).end(err);
         if (!user) return res.status(401).end("Username " + username + " does not exist");
         if (user.hash !== createHash(password, user.salt)) return res.status(401).end("Incorrect Password"); 
-        
-        return res.json({token: jwt.sign({ SSN: user._id,  password: password, _id: user._id}, "Secret")});
+        return res.json({token: jwt.sign({ SSN: user._id,  password: password}, "Secret", {expiresIn:'1h'})});
       });
+});
+
+// let authenticated users sign out
+app.get('/signout/', function (req, res, next) {
+    res.status(200).send({token: null});
 });
 
 
