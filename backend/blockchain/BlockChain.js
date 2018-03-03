@@ -1,26 +1,29 @@
-import Block from 'Block';
+var Block = require("./Block.js");
+var Transaction = require("./Transaction.js");
 
-class Blockchain {
+
+module.exports = class Blockchain {
     constructor() {
         this.chain = [this.createStartingBlock()]
     }
 
     getBalanceOfAddress(addr) {
         let balance = 0;
+        
         for (const block in this.chain) {
-            for (const trans in this.chain.transactionData) {
-                if(trans.toAddr === addr) {
-                    balance += trans.amount;
-                }
-                if(trans.fromAddr === addr) {
-                    balance -= trans.amount;
-                }
+            console.log(this.chain[block]);
+            var trans = this.chain[block].transactionData;
+            if(trans.toAddr === addr) {
+                balance += trans.amount;
+            }
+            if(trans.fromAddr === addr) {
+                balance -= trans.amount;
             }
         }
         return balance;
     }
     createStartingBlock() {
-        return new Block(0, '3/3/2018', "Starting Block", "0")
+        return new Block(0, '3/3/2018', new Transaction(0,0,0), "0")
     }
     getLastNode() {
         return this.chain[this.chain.length -1]

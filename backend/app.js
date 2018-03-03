@@ -1,3 +1,5 @@
+var Blockchain = require("./blockchain/BlockChain.js");
+
 const express = require('express');
 const http = require('http');
 const PORT = 3000;
@@ -19,6 +21,7 @@ var config = {
     cert: certificate
 };
 
+var blockchain = new Blockchain();
 var users =  new Datastore({ filename: 'db/users.db', autoload: true});
 
 function createSalt(){
@@ -85,10 +88,28 @@ app.post('/signin', function (req, res, next) {
       });
 });
 
+app.post('/getWalletDetails/', function(req, res, next){
+    if (!('jwt' in req.body)) return res.status(401).end('JWT is missing. Not Authorized');
+    var token = req.body.jwt;
+    jwt.verify(token, "Secret", function(err, decoded){
+        if (err) return res.status(500).end('Failed to authenticate token');
+        users.findOne({_id: decoded.SSN}, function(err, user){
+            if (err) return res.status(500).end('Failed to find user');
+            if (!user) return res.status(401).end('JWT is not valid');
+            return res.json({wallet:user._id, coin:blockchain.getBalanceOfAddress(user._id)});
+        });
+    });
+});
+
 // let authenticated users sign out
 app.get('/signout', function (req, res, next) {
     res.status(200).send({token: null});
 });
+
+app.get('/analytics/', function (req, res, next){
+    
+});
+
 
 
 http.createServer(app).listen(PORT, function (err) {
