@@ -20,6 +20,11 @@ class WalletPrompt extends Component {
         this.setState({open: false});
     };
 
+    sendTransaction = () => {
+        //var request = require("request");
+
+    }
+
     walletChange(e) {
         this.setState({wallet: e.target.value})
     }
@@ -37,7 +42,7 @@ class WalletPrompt extends Component {
               label="Submit"
               primary={true}
               keyboardFocused={true}
-              onClick={this.handleClose} // To be changed later
+              onClick={this.sendTransaction} // To be changed later
             />,
           ];
       return(

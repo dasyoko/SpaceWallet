@@ -19,7 +19,7 @@ class Analytics extends Component {
         request(options, function (error, response, body) {
             if(response.statusCode !== 200) {
                 window.sessionStorage.clear();
-                window.location = "/login"
+                window.location = "/"
             }
             else {
                 this.setState({data: body, dataLoaded: true});

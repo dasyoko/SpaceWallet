@@ -18,26 +18,15 @@ class WalletDetails extends Component {
 
     componentDidMount() {
         var request = require("request");
-
-        var options = { method: 'POST',
+        var self = this;
+        var options = { method: 'GET',
         url: 'http://172.46.2.78:3000/getWalletDetails/',
         headers: 
-        { 'Content-Type': 'application/json' },
-        body: { jwt:  window.sessionStorage.getItem("jwt")},
-        json: true };
-        var self = this;
+        { jwt: sessionStorage.getItem("jwt")} }
         request(options, function (error, response, body) {
-            if(response.statusCode === 401) {
-                window.sessionStorage.clear();
-                window.location = "/";
-            }
-            else if (response.statusCode === 500) {
-                alert("Server down.")
-                window.location = "/";
-            }
-            else if(response.statusCode === 200) {
-                self.setState({walletDetails: body, dataLoaded: true})
-            }
+        if (error) throw new Error(error);
+
+        self.setState({walletDetails: body, dataLoaded: true});
         });
         console.log(this.state.walletDetails)
     }
