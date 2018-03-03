@@ -2,6 +2,14 @@
   width: 50%;
 }
 
-.registerBtn {
+h1 {
+  margin: 20px;
+  padding: 20px;
+}
+
+.financialDetails {
+  margin: 10px;
+}
+.financialDetails .secondBtn {
   margin: 10px;
 }

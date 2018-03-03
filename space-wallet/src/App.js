@@ -4,13 +4,14 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import LoginComponent from './components/Login';
 import RegisterComponent from './components/Register'
 import { Route, Switch } from 'react-router-dom'
+import WalletDetails from './components/mainpage/WalletDetails';
 
 
 class App extends Component {
   render() {
     return (
       <Switch>
-        <Route exact path='/login' render={() => (
+        <Route exact path='/' render={() => (
           <div className="loginForm">
             <MuiThemeProvider>
               <LoginComponent />
@@ -24,6 +25,13 @@ class App extends Component {
             </MuiThemeProvider>
           </div>
         )}/> 
+        <Route exact path='/main' render={() => (
+          <div>
+            <MuiThemeProvider>
+              <WalletDetails/>
+            </MuiThemeProvider>
+          </div>
+        )}/>
       </Switch>
     );
   }

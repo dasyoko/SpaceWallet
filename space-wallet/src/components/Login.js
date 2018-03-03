@@ -8,12 +8,15 @@ class LoginComponent extends Component {
     super(props);
     this.state = {username: '', password: ''}
   }
+  
+  // Create event functions to set the values of the input fields
   usernameTextChange(e) {
     this.setState({username: e.target.value})
   }
   passwordTextChange(e) {
     this.setState({password: e.target.value})
   }
+  // Make POST request to back-end
   login() {
     var request = require("request");
 

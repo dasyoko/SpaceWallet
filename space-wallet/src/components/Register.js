@@ -20,6 +20,7 @@ class RegisterComponent extends Component {
     this.state = {username: '', password: '', value: "person"}
   }
 
+  // Create event functions to set the values of the input fields
   handleChange = (event, index, value) => this.setState({value});
   usernameTextChange(e) {
     this.setState({username: e.target.value})
@@ -29,6 +30,8 @@ class RegisterComponent extends Component {
   }
 
   register() {
+    // Make request to backend and send the data
+    // TO:DO Add client-side validation
     var request = require("request");
 
     var options = { method: 'POST',
@@ -45,7 +48,8 @@ class RegisterComponent extends Component {
           alert("Please fill out all information")
         }
         else {
-          window.location = '/login'
+          // Redirect user to login
+          window.location = '/'
         }
       });
   }
