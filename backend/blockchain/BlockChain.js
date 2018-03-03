@@ -10,10 +10,33 @@ class Blockchain {
     getLastNode() {
         return this.chain[this.chain.length -1]
     }
-    validateNode() {
+    validateChain() {
         // Check every node in the chain
+        for(var i = 1; i < this.chain.length; i++) {
+            if(this.chain[i].hash != this.chain[i].calculateHash()) {
+                return false;
+            }
+            if(this.chain[i].prevHash != this.chain[i -1].prevHash()) {
+                return false;
+            }
+        }
+        return true;
     }
     addNode(newBlock) {
-        // add New block to the chain
+        // Check if blockchain is valid
+        if(validateChain()) {
+            // Get last node's hash and insert into the new block
+        
+            newBlock.prevHash = this.chain[this.chain.length-1].hash;
+
+            // Push into the chain
+
+            this.chain.push(newBlock);
+            return true;
+        }
+        else {
+            return false;
+        }
+        
     }
 }
