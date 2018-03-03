@@ -5,7 +5,7 @@ class Blockchain {
         this.chain = [this.createStartingBlock()]
     }
     createStartingBlock() {
-        return new Block(0, '3/3/2018', null, "0")
+        return new Block(0, '3/3/2018', "Starting Block", "0")
     }
     getLastNode() {
         return this.chain[this.chain.length -1]
@@ -13,10 +13,10 @@ class Blockchain {
     validateChain() {
         // Check every node in the chain
         for(var i = 1; i < this.chain.length; i++) {
-            if(this.chain[i].hash != this.chain[i].calculateHash()) {
+            if(this.chain[i].hash !== this.chain[i].calculateHash()) {
                 return false;
             }
-            if(this.chain[i].prevHash != this.chain[i -1].prevHash()) {
+            if(this.chain[i].prevHash !== this.chain[i -1].prevHash()) {
                 return false;
             }
         }
@@ -27,7 +27,7 @@ class Blockchain {
         if(validateChain()) {
             // Get last node's hash and insert into the new block
         
-            newBlock.prevHash = this.chain[this.chain.length-1].hash;
+            newBlock.prevHash = getLastNode().hash;
 
             // Push into the chain
 
