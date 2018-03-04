@@ -33,7 +33,7 @@ module.exports = class Blockchain {
             if(this.chain[i].hash !== this.chain[i].calculateHash()) {
                 return false;
             }
-            if(this.chain[i].prevHash !== this.chain[i -1].prevHash) {
+            if(this.chain[i].prevHash !== this.chain[i -1].hash) {
                 return false;
             }
         }
@@ -41,7 +41,7 @@ module.exports = class Blockchain {
     }
     addNode(newBlock) {
         // Check if blockchain is valid
-        //if(this.validateChain()) {
+        if(this.validateChain()) {
             // Get last node's hash and insert into the new block
         
             newBlock.prevHash = this.getLastNode().hash;
@@ -50,11 +50,10 @@ module.exports = class Blockchain {
 
             this.chain.push(newBlock);
             return true;
-        /*}
+        }
         else {
-            console.log("its failing");
             return false;
-        }*/
+        }
     }
 
     getChain(){

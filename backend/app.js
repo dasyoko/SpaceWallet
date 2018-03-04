@@ -106,7 +106,6 @@ app.post('/makeTransaction/', function(req, res, next){
                 var transaction = new Transaction(user._id, toAddr, amount, receiver.type);
                 var newBlock = new Block(blockchain.getChainLength() + 1, new Date, transaction, blockchain.getLastNode().hash);
                 blockchain.addNode(newBlock);
-                console.log(blockchain.getChain());
                 return res.json("Your transaction was successfull");
             });
         });
