@@ -10,30 +10,30 @@ class Contracts extends Component {
     }
     componentDidMount() {
         var request = require("request");
-
+        var self = this;
         var options = { method: 'GET',
         url: 'http://172.46.2.78:3000/getContracts/',
         headers: 
-        { 'Content-Type': 'application/json' },
-        body: { jwt:  window.sessionStorage.getItem("jwt")},
-        json: true };
+        { 'Content-Type': 'application/json', jwt:  window.sessionStorage.getItem("jwt")}};
         
         request(options, function (error, response, body) {
             if(response.statusCode !== 200) { 
                 alert("No contracts found!")
             }
             else {
-                this.setState({data: body, dataLoaded: true});
+                console.log(body)
+                self.setState({data: JSON.parse(body), dataLoaded: true});
             }
         });
     }
     render() {
-        if(!this.state.dataLoaded) {
-            var contractArray = [];
-            for (var i = 0; i < this.state.data.length; i++) {
-                contractArray.push(<ListItem primaryText={this.state.data[i].name} />);
-            }
-            return (<div><AppBar/><List>{contractArray}</List></div>)
+        if(this.state.dataLoaded) {
+            return(<div><AppBar/><List>{this.state.data.map(function(listValue, index){
+                return <div><ListItem key={index} primaryText={"Category: " + listValue.name}>{listValue.desc}</ListItem><p/></div>;
+              })}</List></div>)
+        }
+        else {
+            return(null)
         }
     }
 }
