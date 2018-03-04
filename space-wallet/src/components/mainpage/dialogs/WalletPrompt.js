@@ -22,6 +22,17 @@ class WalletPrompt extends Component {
 
     sendTransaction = () => {
         var request = require("request");
+        var options = { method: 'POST',
+        url: 'http://172.46.2.78:3000/makeTransaction/',
+        headers: 
+        { jwt: sessionStorage.getItem("jwt"), 'Content-Type': 'application/json'}, 
+        body: { toAddr: this.state.wallet, amount: this.state.amount },
+        json: true };
+
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            alert(body)
+        });
 
     }
 
