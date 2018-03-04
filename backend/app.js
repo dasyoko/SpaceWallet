@@ -26,7 +26,6 @@ var config = {
 
 var blockchain = new Blockchain();
 var users =  new Datastore({ filename: 'db/users.db', autoload: true});
-var contracts =  new Datastore({ filename: 'db/contracts.db', autoload: true});
 
 function createSalt(){
     return crypto.randomBytes(16).toString('base64');
@@ -37,7 +36,6 @@ function createHash(password, salt){
     hash.update(password);
     return hash.digest('base64');
 }
-
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());   
