@@ -159,10 +159,15 @@ app.get('/getAnalytics/', function (req, res, next){
 });
 
 app.get('/getContracts', function (req, res, next){
-    contracts.find({}, function(err, contracts){
-        if (err) return res.status(500).end("Failed to find contracts");
-        return res.json(contracts);
-    });
+    contracts = { '1': {name:"school", desc:"Help make a school"},
+    '2' : {name:"hospitals", desc:"Help make a hospital"},
+    '3' : {name:"residences", desc:"Help make residences"},
+    '4' : {name:"amusementpark", desc:"Help make amusement parks"},
+    '5' : {name:"libraries", desc:"Help make libraries"},
+    '6' : {name:"amusementpark", desc:"Help make amusementpark"},
+    '7' : {name:"agriculture", desc:"Help with farming"}, 
+    '8' : {name:"mining", desc:"Help mine everything"}};
+    return res.json(contracts);
 });
 
 
