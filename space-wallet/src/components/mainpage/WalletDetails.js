@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import AppBar from '../AppBar';
 import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 import WalletPrompt from './dialogs/WalletPrompt';
+import '../../App.css';
 
 
 class WalletDetails extends Component {
@@ -17,22 +18,14 @@ class WalletDetails extends Component {
 
     componentDidMount() {
         var request = require("request");
-
-        var options = { method: 'POST',
+        var self = this;
+        var options = { method: 'GET',
         url: 'http://172.46.2.78:3000/getWalletDetails/',
         headers: 
-        { 'Content-Type': 'application/json' },
-        body: { jwt:  window.sessionStorage("jwt")},
-        json: true };
-
+        { jwt: sessionStorage.getItem("jwt")}}
         request(options, function (error, response, body) {
-            if(response.statusCode !== 200) {
-                window.sessionStorage.clear();
-                window.location = "/login"
-            }
-            else {
-                this.setState({walletDetails: body, dataLoaded: true});
-            }
+            if (error) throw new Error(error);
+            self.setState({walletDetails: JSON.parse(body), dataLoaded: true});
         });
     }
 
@@ -48,16 +41,19 @@ class WalletDetails extends Component {
             return(<AppBar/>);
         }
         else {
+            console.log(this.state.walletDetails.coin)
             return(
             <div>
                 <AppBar/>
+                <center>
                 <h1>Wallet Information</h1>
-                <h2>{this.state.walletDetails.coin}</h2>
+                <h2>{this.state.walletDetails.coin} SC</h2>
                 <div className="financialDetails">
                     <RaisedButton onClick={this.promptUser.bind(this)} label="Send"/>
                     <RaisedButton className="secondBtn" label="Check Transaction History"/>
                 </div>
                 <WalletPrompt open = {this.state.prompt} />
+                </center>
             </div>) 
         }
     }

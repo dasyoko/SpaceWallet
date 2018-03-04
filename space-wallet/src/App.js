@@ -5,6 +5,8 @@ import LoginComponent from './components/Login';
 import RegisterComponent from './components/Register'
 import { Route, Switch } from 'react-router-dom'
 import WalletDetails from './components/mainpage/WalletDetails';
+import Analytics from './components/analytics/Analytics';
+import Contracts from './components/contracts/Contracts';
 
 
 class App extends Component {
@@ -29,6 +31,20 @@ class App extends Component {
           <div>
             <MuiThemeProvider>
               <WalletDetails/>
+            </MuiThemeProvider>
+          </div>
+        )}/>
+        <Route exact path='/analytics' render={() => (
+          <div>
+            <MuiThemeProvider>
+              <Analytics/>
+            </MuiThemeProvider>
+          </div>
+        )}/>
+        <Route exact path='/contracts' render={() => (
+          <div>
+            <MuiThemeProvider>
+              <Contracts/>
             </MuiThemeProvider>
           </div>
         )}/>
