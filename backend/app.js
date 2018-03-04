@@ -157,14 +157,13 @@ app.get('/getAnalytics/', function (req, res, next){
 });
 
 app.get('/getContracts', function (req, res, next){
-    contracts = { '1': {name:"school", desc:"Help make a school"},
-    '2' : {name:"hospitals", desc:"Help make a hospital"},
-    '3' : {name:"residences", desc:"Help make residences"},
-    '4' : {name:"amusementpark", desc:"Help make amusement parks"},
-    '5' : {name:"libraries", desc:"Help make libraries"},
-    '6' : {name:"amusementpark", desc:"Help make amusementpark"},
-    '7' : {name:"agriculture", desc:"Help with farming"}, 
-    '8' : {name:"mining", desc:"Help mine everything"}};
+    contracts = [{name:"school", desc:"Help make a school"},
+    {name:"hospitals", desc:"Help make a hospital"},
+    {name:"residences", desc:"Help make residences"},
+    {name:"amusementpark", desc:"Help make amusement parks"},
+    {name:"libraries", desc:"Help make libraries"},
+    {name:"agriculture", desc:"Help with farming"}, 
+    {name:"mining", desc:"Help mine everything"}];
     return res.json(contracts);
 });
 
