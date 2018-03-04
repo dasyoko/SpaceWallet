@@ -26,6 +26,7 @@ var config = {
 
 var blockchain = new Blockchain();
 var users =  new Datastore({ filename: 'db/users.db', autoload: true});
+var contracts =  new Datastore({ filename: 'db/contracts.db', autoload: true});
 
 function createSalt(){
     return crypto.randomBytes(16).toString('base64');
@@ -94,7 +95,7 @@ app.post('/makeTransaction/', function(req, res, next){
     
     var token = req.headers['jwt'];
     var toAddr = req.body['toAddr'];
-    var amount = req.body['amount'];
+    var amount = parseInt(req.body['amount']);
 
     jwt.verify(token, "Secret", function(err, decoded){
         if (err) return res.status(500).end('Failed to authenticate token');
@@ -103,7 +104,7 @@ app.post('/makeTransaction/', function(req, res, next){
             if (!user) return res.status(401).end('JWT is not valid');
             users.findOne({_id:toAddr}, function(err, receiver){
                 if (err) return res.status(500).end('Failed to find user');
-                if (!user) return res.status(401).end('Reciever does not exist');
+                if (!receiver) return res.status(401).end('Reciever does not exist');
                 var transaction = new Transaction(user._id, toAddr, amount, receiver.type);
                 var newBlock = new Block(blockchain.getChainLength() + 1, new Date, transaction, blockchain.getLastNode().hash);
                 blockchain.addNode(newBlock);
@@ -140,7 +141,7 @@ app.get('/getAnalytics/', function (req, res, next){
         users.findOne({_id: decoded.SSN}, function(err, user){
             if (err) return res.status(500).end('Failed to find user');
             if (!user) return res.status(401).end('JWT is not valid');
-            var analytics = {};
+            var analytics = {'person':0, 'education':0, 'grocery':0, 'retail':0, 'other':0};
             var chain = blockchain.getChain()
             for (var block in chain){
                 var trans = chain[block].transactionData;
@@ -154,6 +155,13 @@ app.get('/getAnalytics/', function (req, res, next){
             }
             return res.json({analytics:analytics});
         });
+    });
+});
+
+app.get('/getContracts', function (req, res, next){
+    contracts.find({}, function(err, contracts){
+        if (err) return res.status(500).end("Failed to find contracts");
+        return res.json(contracts);
     });
 });
 
