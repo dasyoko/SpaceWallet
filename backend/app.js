@@ -1,4 +1,6 @@
 var Blockchain = require("./blockchain/BlockChain.js");
+var Transaction = require("./blockchain/Transaction.js");
+var Block = require("./blockchain/Block.js");
 
 const express = require('express');
 const http = require('http');
@@ -10,6 +12,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const app = express();
+
 app.use(cors());
 app.options('*', cors());
 
@@ -41,10 +44,6 @@ app.use(bodyParser.json());
 app.use(function (req, res, next){
     console.log("HTTP request", req.method, req.url, req.body);
     next();
-});
-
-app.get('/api/stuff', function(req, res, next){
-    res.json({stuff:'stuff'});
 });
 
 app.post('/register', function (req, res, next){
@@ -88,9 +87,41 @@ app.post('/signin', function (req, res, next) {
       });
 });
 
-app.post('/getWalletDetails/', function(req, res, next){
-    if (!('jwt' in req.body)) return res.status(401).end('JWT is missing. Not Authorized');
-    var token = req.body.jwt;
+app.post('/makeTransaction/', function(req, res, next){
+    if (!('jwt' in req.headers)) return res.status(401).end('JWT is missing. Not Authorized');
+    if (!('toAddr' in req.body)) return res.status(400).end('Missing toAddr');
+    if (!('amount' in req.body)) return res.status(400).end('Missing amount');
+    
+    var token = req.headers['jwt'];
+    var toAddr = req.body['toAddr'];
+    var amount = req.body['amount'];
+
+    jwt.verify(token, "Secret", function(err, decoded){
+        if (err) return res.status(500).end('Failed to authenticate token');
+        users.findOne({_id: decoded.SSN}, function(err, user){
+            if (err) return res.status(500).end('Failed to find user');
+            if (!user) return res.status(401).end('JWT is not valid');
+            users.findOne({_id:toAddr}, function(err, receiver){
+                if (err) return res.status(500).end('Failed to find user');
+                if (!user) return res.status(401).end('Reciever does not exist');
+                var transaction = new Transaction(user._id, toAddr, amount, receiver.type);
+                var newBlock = new Block(blockchain.getChainLength() + 1, new Date, transaction, blockchain.getLastNode().hash);
+                blockchain.addNode(newBlock);
+                console.log(blockchain.getChain());
+                return res.json("Your transaction was successfull");
+            });
+        });
+    });
+});
+
+// let authenticated users sign out
+app.get('/signout', function (req, res, next) {
+    res.status(200).send({token: null});
+});
+
+app.get('/getWalletDetails/', function(req, res, next){
+    if (!('jwt' in req.headers)) return res.status(401).end('JWT is missing. Not Authorized');
+    var token = req.headers['jwt'];
     jwt.verify(token, "Secret", function(err, decoded){
         if (err) return res.status(500).end('Failed to authenticate token');
         users.findOne({_id: decoded.SSN}, function(err, user){
@@ -101,13 +132,29 @@ app.post('/getWalletDetails/', function(req, res, next){
     });
 });
 
-// let authenticated users sign out
-app.get('/signout', function (req, res, next) {
-    res.status(200).send({token: null});
-});
-
-app.get('/analytics/', function (req, res, next){
-    
+app.get('/getAnalytics/', function (req, res, next){
+    if (!('jwt' in req.headers)) return res.status(401).end('JWT is missing. Not Authorized');
+    var token = req.headers['jwt'];
+    jwt.verify(token, "Secret", function(err, decoded){
+        if (err) return res.status(500).end('Failed to authenticate token');
+        users.findOne({_id: decoded.SSN}, function(err, user){
+            if (err) return res.status(500).end('Failed to find user');
+            if (!user) return res.status(401).end('JWT is not valid');
+            var analytics = {};
+            var chain = blockchain.getChain()
+            for (var block in chain){
+                var trans = chain[block].transactionData;
+                if(trans.fromAddr === user._id) {
+                    if (trans.type in analytics){
+                        analytics[trans.type] += 1;
+                    } else {
+                        analytics[trans.type] = 1;
+                    }
+                }
+            }
+            return res.json({analytics:analytics});
+        });
+    });
 });
 
 

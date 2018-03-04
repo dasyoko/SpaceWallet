@@ -11,7 +11,6 @@ module.exports = class Blockchain {
         let balance = 0;
         
         for (const block in this.chain) {
-            console.log(this.chain[block]);
             var trans = this.chain[block].transactionData;
             if(trans.toAddr === addr) {
                 balance += trans.amount;
@@ -23,7 +22,7 @@ module.exports = class Blockchain {
         return balance;
     }
     createStartingBlock() {
-        return new Block(0, '3/3/2018', new Transaction(0,0,0), "0")
+        return new Block(0, '3/3/2018', new Transaction(0,0,0, 'Person'), "0")
     }
     getLastNode() {
         return this.chain[this.chain.length -1]
@@ -34,7 +33,7 @@ module.exports = class Blockchain {
             if(this.chain[i].hash !== this.chain[i].calculateHash()) {
                 return false;
             }
-            if(this.chain[i].prevHash !== this.chain[i -1].prevHash()) {
+            if(this.chain[i].prevHash !== this.chain[i -1].prevHash) {
                 return false;
             }
         }
@@ -42,10 +41,10 @@ module.exports = class Blockchain {
     }
     addNode(newBlock) {
         // Check if blockchain is valid
-        if(validateChain()) {
+        if(this.validateChain()) {
             // Get last node's hash and insert into the new block
         
-            newBlock.prevHash = getLastNode().hash;
+            newBlock.prevHash = this.getLastNode().hash;
 
             // Push into the chain
 
@@ -55,6 +54,13 @@ module.exports = class Blockchain {
         else {
             return false;
         }
-        
+    }
+
+    getChain(){
+        return this.chain;
+    }
+
+    getChainLength(){
+        return this.chain.length;
     }
 }
